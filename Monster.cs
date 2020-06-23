@@ -141,6 +141,10 @@ public abstract class Monster : BaseCharacter, Hittable
 
     #endregion
 
+    /// <summary>
+    /// 애니메이터 상태 설정
+    /// </summary>
+    /// <param name="state"></param>
     #region State Set Func (Animator State Change)
     public virtual void OnAppear(bool state = true) { ThisAnimator.SetBool("OnAppear", state); }
     public virtual void OnIdle(bool state = true) { ThisAnimator.SetBool("OnIdle", state); }
@@ -154,6 +158,7 @@ public abstract class Monster : BaseCharacter, Hittable
         ThisAnimator.SetBool("OnDead", state);
     }
     public virtual void OnDisappear(bool state = true) { ThisAnimator.SetBool("OnDisappear", state); }
+
 
     public void StateInit()
     {
@@ -177,11 +182,22 @@ public abstract class Monster : BaseCharacter, Hittable
 
     #region Hit Func
 
+    /// <summary>
+    /// 공격 받았을때 데미지 설정
+    /// </summary>
+    /// <param name="Damage"></param>
     public void ReduceHealth(float Damage)
     {
         m_fRemainHealth -= Damage;
     }
 
+    /// <summary>
+    /// 몬스터 마다 설정을 위해서 가상함수로 HitEvent를 설정.
+    /// </summary>
+    /// <param name="hitPoint"></param>
+    /// <param name="damage"></param>
+    /// <param name="hitType"></param>
+    /// <param name="isWeakPoint"></param>
     public virtual void HitEvent(Vector3 hitPoint, float damage = 0.0f, HitType hitType = HitType.NONE, bool isWeakPoint = false)
     {
         if (!IsAlive)
@@ -204,6 +220,13 @@ public abstract class Monster : BaseCharacter, Hittable
         }
     }
 
+    /// <summary>
+    /// 몬스터가 공격 받았을때 작동. HitEvent를 호출
+    /// </summary>
+    /// <param name="hitPoint"></param>
+    /// <param name="damage"></param>
+    /// <param name="hittype"></param>
+    /// <param name="isWeakPoint"></param>
     public void Hit(Vector3 hitPoint, float damage = 0, HitType hittype = HitType.NONE, bool isWeakPoint = false)
     {
         HitEvent(hitPoint, damage, hittype, isWeakPoint);
@@ -213,6 +236,9 @@ public abstract class Monster : BaseCharacter, Hittable
 
     #region Attack Func
 
+    /// <summary>
+    /// 몬스터가 생성되었을 때 skillManager를 초기화한다.
+    /// </summary>
     protected virtual void InitSkill()
     {
         if (skillManager != null)
@@ -225,6 +251,9 @@ public abstract class Monster : BaseCharacter, Hittable
         }   
     }
 
+    /// <summary>
+    /// 스킬 쿨타임을 계산한다.
+    /// </summary>
     protected virtual void UpdateSkill()
     {
         if (skillManager != null)
